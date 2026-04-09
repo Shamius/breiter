@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Перед тренингом: как ты обычно работаешь с идеями?</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#18324d;--muted:#5a728a;--accent:#7a3cff;--soft:#f1e9ff;--border:#ddd9f0;--shadow:0 12px 30px rgba(18,44,74,.08);--radius:18px}
+*{box-sizing:border-box}body{margin:0;font-family:Calibri,Arial,sans-serif;background:linear-gradient(180deg,#f7f6fc 0,#eff2fb 100%);color:var(--text)}
+.page{width:min(920px,calc(100vw - 32px));margin:32px auto 40px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero,.box{padding:24px}.hero{margin-bottom:18px}h1{margin:0 0 12px;font-size:clamp(28px,5vw,40px);line-height:1.08}.subtitle{margin:0;color:var(--muted);font-size:18px;line-height:1.5;max-width:770px}.small{margin-top:12px;color:var(--muted);font-size:14px}
+.hidden{display:none!important}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-size:15px;margin-bottom:14px}.progress{width:100%;height:10px;background:#edf2f8;border-radius:999px;overflow:hidden;margin:10px 0 2px}.bar{height:100%;width:0;background:linear-gradient(90deg,#b58cff,var(--accent));transition:width .25s ease}
+.tag{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--accent);font-size:14px;margin-bottom:14px}.q{margin:0 0 14px;font-size:clamp(22px,3.4vw,30px);line-height:1.2}.help{margin:0 0 18px;color:var(--muted);font-size:16px;line-height:1.45}.options{display:grid;gap:12px}.option{border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:.15s;background:#fff}.option:hover{border-color:#c0afe8;transform:translateY(-1px);background:#fcfbff}.option.sel{border-color:var(--accent);background:var(--soft)}.option input{margin-top:2px;transform:scale(1.15);accent-color:var(--accent)}.option span{font-size:17px;line-height:1.45}
+textarea{width:100%;min-height:160px;resize:vertical;border:1px solid var(--border);border-radius:14px;padding:14px 16px;font:inherit;color:var(--text);background:#fff;line-height:1.45}textarea:focus{outline:2px solid rgba(122,60,255,.14);border-color:var(--accent)}
+.controls{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:22px}button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-size:16px;cursor:pointer;transition:.12s}button:hover{transform:translateY(-1px)}button:disabled{opacity:.5;cursor:not-allowed;transform:none}.primary{background:var(--accent);color:#fff;min-width:180px}.secondary{background:#eef3f8;color:var(--text)}.ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.settings{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);display:grid;gap:12px}.check{display:flex;gap:10px;align-items:flex-start;color:var(--text);font-size:16px}.kpi{display:grid;gap:14px}.pill{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fbfaff}.pill h3{margin:0 0 8px;font-size:21px}.pill p{margin:0;color:var(--muted);line-height:1.5}.grid{display:grid;gap:14px;margin-top:18px}.result h2{margin:0 0 10px;font-size:30px}.result p{margin:0 0 12px;line-height:1.55}.list{display:grid;gap:10px;margin-top:10px}.ans{border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:#fff}.ans strong{display:block;margin-bottom:6px}.muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="card hero" id="start">
+    <h1>Перед тренингом: как ты обычно работаешь с идеями?</h1>
+    <p class="subtitle">Это короткий входной опросник перед модулем по дивергентному мышлению. Он помогает понять не «креативный ли ты человек», а то, как у тебя сейчас устроен сам процесс работы с идеями.</p>
+    <div class="small">Здесь важны не правильные ответы, а твой реальный стиль: как идеи разгоняются, что их зажимает, насколько легко менять ракурс и как ты относишься к собственным способам генерации.</div>
+    <div class="settings">
+      <label class="check"><input type="checkbox" id="shuffle" checked> <span>Перемешать вопросы перед началом</span></label>
+      <label class="check"><input type="checkbox" id="opens" checked> <span>Показать мои ответы на открытые вопросы в финале</span></label>
+    </div>
+    <div class="controls"><span></span><button class="primary" id="startBtn">Начать</button></div>
+  </section>
+
+  <section class="card box hidden" id="quiz">
+    <div class="top"><div id="progressText"></div><div id="typeText"></div></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="tag" id="tag"></div>
+    <h2 class="q" id="prompt"></h2>
+    <p class="help" id="help"></p>
+    <div id="body"></div>
+    <div class="controls">
+      <button class="ghost" id="backBtn">Назад</button>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="secondary" id="skipBtn">Пропустить</button>
+        <button class="primary" id="nextBtn">Дальше</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card box result hidden" id="result">
+    <h2>Твой входной профиль</h2>
+    <p id="lead"></p>
+    <div class="kpi" id="profile"></div>
+    <div class="grid">
+      <div class="pill"><h3 id="logicTitle"></h3><p id="logicText"></p></div>
+      <div class="pill"><h3>Что это значит для входа в тренинг</h3><p id="nextText"></p></div>
+    </div>
+    <div id="openWrap" class="grid hidden">
+      <div class="pill">
+        <h3>Твои открытые ответы</h3>
+        <div class="list" id="openList"></div>
+      </div>
+    </div>
+    <div class="controls"><span></span><button class="primary" id="restartBtn">Пройти заново</button></div>
+  </section>
+</div>
+<script>
+const KEY='breiter-pretest-v1';
+const QUESTIONS=[
+{id:'need',tag:'Запрос',type:'single',prompt:'Что тебе сейчас важнее всего получить от темы дивергентного мышления?',help:'Выбери то, что откликается сильнее именно сейчас.',options:[['Быстрее разгонять поток идей',{flow:3}],['Меньше бояться банальных или «неправильных» идей',{freedom:3}],['Легче смотреть на задачу с разных сторон',{flex:3}],['Научиться собирать свой способ генерации под задачу',{method:3}]]},
+{id:'signs',tag:'Состояние',type:'multi',prompt:'Что чаще всего происходит с тобой в начале мозгового штурма или поиска идей?',help:'Можно выбрать несколько вариантов.',options:[['Долго раскачиваюсь, первые идеи идут туго',{flow:2}],['Слишком рано начинаю оценивать и отбрасывать варианты',{freedom:2}],['Застреваю в одном очевидном ракурсе',{flex:2}],['Мне проще, когда есть понятный способ или рамка работы',{method:2}],['После пятой-шестой идеи становится заметно легче',{flow:1},1]]},
+{id:'clamp',tag:'Открытый вопрос',type:'open',prompt:'Что в рабочем контексте чаще всего зажимает идеи?',help:'Напиши как есть: нехватка времени, критика, давление на «правильность», слишком узкая постановка задачи — или что-то другое.'},
+{id:'warmup',tag:'Ситуация',type:'single',prompt:'Тебе нужно быстро запустить генерацию идей. Какой первый ход выглядит наиболее здраво?',help:'Выбери вариант, который лучше помогает именно разогнать мышление.',options:[['Сначала дать себе короткий этап на количество без обсуждения и оценки',{flow:1,freedom:1},1],['Сразу выбрать самую реалистичную идею и углублять только её',{},0],['Сразу начать спорить, какие идеи слабые, а какие сильные',{},0],['Сначала дождаться, пока появится по-настоящему оригинальная мысль',{},0]]},
+{id:'accelerate',tag:'Разгон идей',type:'multi',prompt:'Что обычно действительно помогает идеям идти легче?',help:'Можно выбрать несколько вариантов.',options:[['Разрешение сначала думать на количество, а не на качество',{flow:2,freedom:1},1],['Отсрочка оценки хотя бы на короткий этап',{freedom:2},1],['Чужие идеи, от которых можно оттолкнуться',{flex:1,flow:1},1],['Необычное ограничение или смена угла зрения',{flex:2},1],['Ранний поиск одного «правильного» ответа',{},0]]},
+{id:'went',tag:'Открытый вопрос',type:'open',prompt:'Вспомни ситуацию, когда идеи вдруг пошли легче. Что тогда помогло?',help:'Это может быть формат, человек рядом, тайминг, свобода от оценки, удачная рамка вопроса — что угодно.'},
+{id:'groupstart',tag:'Работа в группе',type:'single',prompt:'Что полезнее в начале групповой генерации?',help:'Смотри не на «как принято», а на то, что правда лучше работает для идей.',options:[['Сначала собрать больше вариантов без обсуждения, а выбирать позже',{freedom:1,flow:1},1],['Сразу договориться, какая идея кажется лучшей',{},0],['Попросить самого опытного участника сразу задать правильное решение',{},0],['Как можно раньше начать критиковать слабые варианты',{},0]]},
+{id:'constructor',tag:'Конструктор',type:'multi',prompt:'Что делает способ генерации идей действительно рабочим?',help:'Выбери всё, что кажется тебе полезным.',options:[['Понятные шаги', {method:2},1],['Отдельный этап для генерации и отдельный — для отбора', {method:1,freedom:1},1],['Ограничение по времени', {flow:1,method:1},1],['Возможность подстроить способ под конкретную задачу', {method:2,flex:1},1],['Жёсткая ориентация только на один привычный формат', {},0]]},
+{id:'selftool',tag:'Ситуация',type:'single',prompt:'Если способ не дал хорошего результата, что полезнее проверить сначала?',help:'Выбери наиболее зрелый вариант.',options:[['Сам способ и условия его применения: что в нём стоило бы поменять',{method:2},1],['Свою «креативность»: видимо, я просто не умею придумывать',{},0],['Участников: значит, с этой группой идей не бывает',{},0],['Вообще отказаться от подобных форматов',{},0]]},
+{id:'testnotself',tag:'Подход',type:'single',prompt:'Какое утверждение ближе к здоровой логике работы с дивергентным мышлением?',help:'Здесь важна сама логика процесса.',options:[['Мы тестируем не себя, а способ — и можем его улучшать',{method:1,freedom:1},1],['Если хорошие идеи не появились сразу, значит, креативности нет',{},0],['По-настоящему сильные идеи должны приходить без разогрева',{},0],['Лучше сразу отбрасывать всё сыроватое, чтобы не тратить время',{},0]]},
+{id:'entry',tag:'Старт обучения',type:'single',prompt:'Как тебе было бы комфортнее входить в такой тренинг?',help:'Выбери формат старта, который кажется тебе наиболее посильным и полезным.',options:[['С короткого разгона, где количество важнее правильности',{flow:1,freedom:1},1],['С разбора того, что именно разгоняет и зажимает идеи у меня и группы',{method:1},1],['С готового набора принципов, из которых потом можно собрать свой инструмент',{method:1,flex:1},1],['Сразу с жёсткого кейса на результат без разогрева',{},0]]}
+];
+const PROFILE={flow:['Разгон идей','Тебе сейчас важнее всего помочь идеям стартовать быстрее. Полезнее всего будут короткие разогревы, работа на количество и форматы, которые снимают ступор первых минут.'],freedom:['Свобода от оценки','Похоже, главный тормоз — слишком ранняя внутренняя или внешняя оценка. Для тебя особенно полезны режимы, где можно сначала выдать материал, а уже потом разбирать качество.'],flex:['Гибкость ракурсов','Тебе может быть особенно важно расширять поле зрения: менять угол вопроса, отталкиваться от чужих ходов и специально вытаскивать себя из первого очевидного ответа.'],method:['Сборка собственного способа','Тебе полезно не только генерировать идеи, но и понимать, как устроен сам процесс. Скорее всего, тебе зайдут шаги, где можно собрать, назвать и улучшить свой инструмент.']};
+const LOGIC=[[2,'Пока процесс легко схлопывается в поиск «правильного ответа».','Есть риск слишком рано переходить к оценке и тем самым обрезать саму генерацию. На тренинге особенно важно будет почувствовать, как работает разнесение этапов: сначала идеи, потом отбор.'],[5,'Базовая логика уже вполне здравая.','Похоже, ты интуитивно понимаешь несколько сильных принципов: идеи надо разгонять, оценку можно откладывать, а сам способ — настраивать под задачу.'],[99,'У тебя уже сильная процессная опора.','Ты, вероятно, довольно хорошо понимаешь, что дивергентное мышление — это не магия и не врождённый дар, а настраиваемый процесс. Для тебя обучение может быть особенно полезно на уровне тонкой настройки методов.']];
+let state={order:[],answers:{},i:0,showOpen:true};
+const $=s=>document.querySelector(s), start=$('#start'), quiz=$('#quiz'), result=$('#result'), body=$('#body');
+function save(){localStorage.setItem(KEY,JSON.stringify(state))} function clearSaved(){localStorage.removeItem(KEY)}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function current(){return QUESTIONS.find(q=>q.id===state.order[state.i])}
+function markSelected(){document.querySelectorAll('.option').forEach(el=>{let q=current(),a=state.answers[q.id];let val=el.dataset.v;if(q.type==='single'){el.classList.toggle('sel',a===+val)}else{el.classList.toggle('sel',Array.isArray(a)&&a.includes(+val))}})}
+function render(){let q=current(); $('#progressText').textContent=`Вопрос ${state.i+1} из ${state.order.length}`; $('#typeText').textContent=q.type==='open'?'Открытый вопрос':q.type==='multi'?'Несколько вариантов':'Один вариант'; $('#bar').style.width=((state.i+1)/state.order.length*100)+'%'; $('#tag').textContent=q.tag; $('#prompt').textContent=q.prompt; $('#help').textContent=q.help||''; body.innerHTML='';
+ if(q.type==='open'){let ta=document.createElement('textarea'); ta.placeholder='Твой ответ'; ta.value=state.answers[q.id]||''; ta.addEventListener('input',e=>{state.answers[q.id]=e.target.value;save()}); body.appendChild(ta)} else {let wrap=document.createElement('div'); wrap.className='options'; q.options.forEach((opt,idx)=>{let lab=document.createElement('label'); lab.className='option'; lab.dataset.v=idx; let inp=document.createElement('input'); inp.type=q.type==='single'?'radio':'checkbox'; inp.name='q'; inp.checked=q.type==='single'?state.answers[q.id]===idx:Array.isArray(state.answers[q.id])&&state.answers[q.id].includes(idx); inp.addEventListener('change',()=>{if(q.type==='single'){state.answers[q.id]=idx}else{let arr=Array.isArray(state.answers[q.id])?[...state.answers[q.id]]:[]; inp.checked?arr.push(idx):arr=arr.filter(x=>x!==idx); state.answers[q.id]=arr} save(); markSelected()}); let span=document.createElement('span'); span.textContent=opt[0]; lab.append(inp,span); wrap.appendChild(lab)}); body.appendChild(wrap); setTimeout(markSelected,0)}
+ $('#backBtn').disabled=state.i===0; $('#nextBtn').textContent=state.i===state.order.length-1?'Показать результат':'Дальше'; }
+function startQuiz(){state={order:($('#shuffle').checked?shuffle(QUESTIONS.map(q=>q.id)):QUESTIONS.map(q=>q.id)),answers:{},i:0,showOpen:$('#opens').checked}; save(); start.classList.add('hidden'); result.classList.add('hidden'); quiz.classList.remove('hidden'); render()}
+function next(skip=false){let q=current(); if(skip){delete state.answers[q.id]} if(state.i<state.order.length-1){state.i++; save(); render()} else finish()}
+function finish(){let score={flow:0,freedom:0,flex:0,method:0}, logic=0; QUESTIONS.forEach(q=>{let ans=state.answers[q.id]; if(q.type==='single' && Number.isInteger(ans)){let opt=q.options[ans]; Object.entries(opt[1]||{}).forEach(([k,v])=>score[k]+=v); logic+=(opt[2]||0)} if(q.type==='multi' && Array.isArray(ans)){ans.forEach(i=>{let opt=q.options[i]; Object.entries(opt[1]||{}).forEach(([k,v])=>score[k]+=v); logic+=(opt[2]||0)})} }); let sorted=Object.entries(score).sort((a,b)=>b[1]-a[1]); let top=sorted[0][0], second=sorted[1][0]; let p1=PROFILE[top], p2=PROFILE[second]; $('#lead').textContent='Ниже — не диагноз и не ярлык, а рабочая гипотеза о том, где тебе сейчас полезнее всего получить поддержку в теме дивергентного мышления.'; let profile=$('#profile'); profile.innerHTML=''; [p1,p2].forEach((p,n)=>{let d=document.createElement('div'); d.className='pill'; d.innerHTML=`<h3>${n===0?'Главный вектор: ':'Второй вектор: '}${p[0]}</h3><p>${p[1]}</p>`; profile.appendChild(d)}); let lf=LOGIC.find(x=>logic<=x[0]); $('#logicTitle').textContent=lf[1]; $('#logicText').textContent=lf[2]; $('#nextText').textContent={flow:'Тебе, скорее всего, особенно зайдут упражнения на разгон: короткие тёплые старты, режим «сначала количество» и форматы, где идеи успевают набрать скорость.',freedom:'Для тебя важным может быть именно снятие ранней оценки. На тренинге особенно ценной станет среда, где можно сначала выдать материал без страха выглядеть странно или сыровато.',flex:'Тебе будет полезно расширять поле зрения: менять постановку вопроса, смотреть на задачу с разных сторон и сознательно выходить из первого очевидного решения.',method:'Тебе, вероятно, особенно важно не просто участвовать в генерации, а видеть механику процесса. Поэтому тебе может быть очень полезен этап, где группа собирает и называет собственный инструмент.'}[top];
+ let openWrap=$('#openWrap'), openList=$('#openList'); openList.innerHTML=''; if(state.showOpen){QUESTIONS.filter(q=>q.type==='open').forEach(q=>{let txt=(state.answers[q.id]||'').trim(); if(!txt) return; let d=document.createElement('div'); d.className='ans'; d.innerHTML=`<strong>${q.prompt}</strong><div class='muted'>${txt.replace(/[<>&]/g,s=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[s]))}</div>`; openList.appendChild(d)}); openWrap.classList.toggle('hidden',!openList.children.length)} else openWrap.classList.add('hidden');
+ clearSaved(); quiz.classList.add('hidden'); start.classList.add('hidden'); result.classList.remove('hidden') }
+$('#startBtn').onclick=startQuiz; $('#backBtn').onclick=()=>{if(state.i>0){state.i--;save();render()}}; $('#skipBtn').onclick=()=>next(true); $('#nextBtn').onclick=()=>next(false); $('#restartBtn').onclick=()=>{start.classList.remove('hidden'); quiz.classList.add('hidden'); result.classList.add('hidden'); clearSaved()};
+window.addEventListener('load',()=>{try{let raw=localStorage.getItem(KEY); if(!raw) return; let saved=JSON.parse(raw); if(saved&&Array.isArray(saved.order)){state=saved; start.classList.add('hidden'); result.classList.add('hidden'); quiz.classList.remove('hidden'); render()}}catch(e){}})
+</script>
+</body>
+</html>
